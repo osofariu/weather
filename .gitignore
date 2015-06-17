@@ -1,0 +1,8 @@
+.gradle/
+build/
+gradle/
+gradlew
+gradlew.bat
+weather.iml
+weather.ipr
+weather.iws
