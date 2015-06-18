@@ -4,35 +4,24 @@ class RssRetriever {
 
     def xml
     def xmlSlurper
-    def tryCount = 3
-    def sleepDuration = 10
+    def tryCount = 10
+    def sleepDuration = 10000
 
     def RssRetriever(XmlSlurper xmlSlurper) {
         this.xmlSlurper = xmlSlurper
     }
 
     def process() {
-        while (tryCount > 0) {
+        while (tryCount-- > 0) {
+            sleepDuration *= 2
             try {
                 xml = getContent()
-
-                printf "try " + tryCount + " sleep: " + sleepDuration  + "\n"
-                if (xml == null) {
-                    printf "sleep " + sleepDuration
-                    sleep(sleepDuration)
-                    tryCount--
-                    sleepDuration += 10
-                } else {
-                    System.out.flush()
-                    break
-                }
+                return
             } catch (IOException e) {
-                println("GOT EXCEPTION *****" + e.message + " " + tryCount)
-                if (tryCount-- == 0) {
-                    throw e
-                }
+                System.sleep(sleepDuration)
             }
         }
+        throw new IOException("Giving up re-trying..")
     }
 
     def GPathResult  getContent() {

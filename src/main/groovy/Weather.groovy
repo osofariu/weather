@@ -37,6 +37,7 @@ class Weather {
 
     static main(args) {
         RssRetriever retriever = new RssRetriever(new XmlSlurper())
+        retriever.process()
         Weather weather = new Weather(retriever)
         if (args.size() <= 0) {
             println "You should provide an argument [conditions | icon | forecast]"

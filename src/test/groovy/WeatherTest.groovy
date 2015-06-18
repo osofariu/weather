@@ -1,8 +1,5 @@
 import spock.lang.Specification
 
-/**
- * Created by ovi on 11/8/14.
- */
 class WeatherTest extends  Specification {
 
     def weather
