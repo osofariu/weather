@@ -48,7 +48,8 @@ class RssRetrieverNetTests  extends  Specification {
             1 * slurper.parse(_) >> result
         }
 
-        RssRetriever retriever = new RssRetriever(slurper)
+        RssRetriever retriever = new RssRetriever()
+        retriever.xmlSlurper = slurper
         retriever.tryCount = tryCount
         retriever.sleepDuration = 1
         return retriever

@@ -1,6 +1,6 @@
 import spock.lang.Specification
 
-class WeatherTest extends  Specification {
+class WeatherTest extends Specification {
 
     def weather
     def mockRetriever

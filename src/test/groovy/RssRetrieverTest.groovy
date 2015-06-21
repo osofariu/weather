@@ -1,20 +1,16 @@
 import spock.lang.Specification
 
-/**
- * Created by ovi on 11/8/14.
- */
 class RssRetrieverTest extends  Specification {
 
     def retriever
 
     def setup() {
-
-        retriever = new RssRetriever(new XmlSlurper())
+        retriever = new RssRetriever()
+        retriever.xmlSlurper = new XmlSlurper()
         def rssText = this.getClass().getResource("rssContent.txt").text
         retriever.xml =  new XmlSlurper().parseText(rssText).declareNamespace(
                 'yweather': 'http://xml.weather.yahoo.com/ns/rss/1.0', 'geo': 'http://www.w3.org/2003/01/geo/wgs84_pos#')
     }
-
 
     def "it gets content from Yahoo weather site when asked to get contents from URL with node rss"() {
         expect:

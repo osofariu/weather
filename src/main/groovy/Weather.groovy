@@ -1,6 +1,3 @@
-/**
- * Created by ovi on 11/8/14.
- */
 class Weather {
 
     def rssRetriever
@@ -36,7 +33,8 @@ class Weather {
     }
 
     static main(args) {
-        RssRetriever retriever = new RssRetriever(new XmlSlurper())
+        RssRetriever retriever = new RssRetriever()
+        retriever.xmlSlurper = new XmlSlurper()
         retriever.process()
         Weather weather = new Weather(retriever)
         if (args.size() <= 0) {

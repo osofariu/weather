@@ -7,10 +7,6 @@ class RssRetriever {
     def tryCount = 10
     def sleepDuration = 10000
 
-    def RssRetriever(XmlSlurper xmlSlurper) {
-        this.xmlSlurper = xmlSlurper
-    }
-
     def process() {
         while (tryCount-- > 0) {
             sleepDuration *= 2
