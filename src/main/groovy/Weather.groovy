@@ -1,9 +1,17 @@
 class Weather {
 
     def rssRetriever
+    def conditionsFile
+    def forecastFile
 
     def Weather(RssRetriever rssRetriever) {
-       this.rssRetriever = rssRetriever
+        this.rssRetriever = rssRetriever
+    }
+
+    def Weather(rssRetriever, conditionsFile,  forecastFile) {
+        this.rssRetriever = rssRetriever
+        this.conditionsFile = conditionsFile
+        this.forecastFile = forecastFile
     }
 
     def currentConditions() {
@@ -21,7 +29,7 @@ class Weather {
     def conditions() {
         def cond = rssRetriever.currentConditions()
         def temp = rssRetriever.currentTemperature()
-        return cond  + ", " + temp  +  "°F"
+        cond  + ", " + temp  +  "°F"
     }
 
     def forecast() {
@@ -32,11 +40,20 @@ class Weather {
         result
     }
 
+    def writeAggregateFiles() {
+        conditionsFile.withWriter {it << conditions()}
+        //forecastFile.withWriter   {it << forecast()}
+    }
+
+    static RssRetriever getRetriever() {
+        def rssRetriever = new RssRetriever()
+        rssRetriever.xmlSlurper = new XmlSlurper()
+        rssRetriever.process()
+        rssRetriever
+    }
+
     static main(args) {
-        RssRetriever retriever = new RssRetriever()
-        retriever.xmlSlurper = new XmlSlurper()
-        retriever.process()
-        Weather weather = new Weather(retriever)
+        Weather weather = new Weather(getRetriever(), new File("/tmp/conditions.txt"), new File("/tmp/forecast.txt"))
         if (args.size() <= 0) {
             println "You should provide an argument [conditions | icon | forecast]"
              System.exit(1)
@@ -46,6 +63,7 @@ class Weather {
             case "conditions" : println weather.conditions(); break
             case "icon" : println weather.currentIcon(); break
             case "forecast" : println weather.forecast(); break
+            case "aggregate" : weather.writeAggregateFiles(); break
             default:
                 println "The argument most be one of: [conditions | icon | forecast]"
         }
