@@ -3,15 +3,16 @@ import spock.lang.Specification
 
 class WeatherTest extends Specification {
 
-    def weather
+    Weather weather
     def rssRetriever
     def conditionsFile
+    def forecastFile
 
     def setup() {
         rssRetriever = Mock(RssRetriever)
-        conditionsFile = Mock (File)
-        GroovySpy(File, global: true, useObjenesis: true)
-        weather = new Weather(rssRetriever, conditionsFile, new MockFor(File))
+        conditionsFile = Mock(File)
+        forecastFile = Mock(File)
+        weather = new Weather(rssRetriever, conditionsFile, forecastFile)
     }
 
     def "Current condition is what we retrieved"() {
@@ -59,19 +60,14 @@ class WeatherTest extends Specification {
     }
 
     def "In aggregate mode, weather should produce files containing the current conditions and forecasts"() {
-        rssRetriever.currentConditions() >> "Mostly Sunny, if I may say so myself"
-//        weather.rssRetriever.forecast() >>
-//                "forecast line 1\n" +
-//                "and line2\n" +
-//                "and line2\n" +
-//                "and line3\n" +
-//                "and line4"
+        when:
+        weather.conditions() >> "Conditions 123"
+        weather.forecast() >>  "Forecast 123"
 
-        def file = new File("/tmp/conditions.txt")
         weather.writeAggregateFiles()
 
-        expect:
-        file.withWriter {it << "Mostly Sunny, if I may say so myself"}
-        //weather.forecastFile.withWriter {it << $/Forecast line1\nine2\nline3\nline4\line5/$}
+        then:
+        1 * conditionsFile.withWriter {it << "Conditions 123"}
+        1 * forecastFile.withWriter {it << "Forecast 123"}
     }
 }

@@ -1,14 +1,14 @@
 class Weather {
 
     def rssRetriever
-    def conditionsFile
-    def forecastFile
+    File conditionsFile
+    File forecastFile
 
     def Weather(RssRetriever rssRetriever) {
         this.rssRetriever = rssRetriever
     }
 
-    def Weather(rssRetriever, conditionsFile,  forecastFile) {
+    def Weather(rssRetriever, conditionsFile, forecastFile) {
         this.rssRetriever = rssRetriever
         this.conditionsFile = conditionsFile
         this.forecastFile = forecastFile
@@ -42,7 +42,7 @@ class Weather {
 
     def writeAggregateFiles() {
         conditionsFile.withWriter {it << conditions()}
-        //forecastFile.withWriter   {it << forecast()}
+        forecastFile.withWriter   {it << forecast()}
     }
 
     static RssRetriever getRetriever() {
