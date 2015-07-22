@@ -37,10 +37,10 @@ class WeatherIntTest  extends  Specification {
         conditionsText.get(0).size() > 0
     }
 
-    private List<String> getTextFromFile(File conditionsFile) {
-        def conditions_lines = conditionsFile.readLines()
-        conditionsFile.delete()
-        conditions_lines
+    private List<String> getTextFromFile(File file) {
+        def lines = file.readLines()
+        file.delete()
+        lines
     }
 
     private RssRetriever getRetriever() {

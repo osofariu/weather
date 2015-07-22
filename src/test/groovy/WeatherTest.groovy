@@ -3,20 +3,30 @@ import spock.lang.Specification
 
 class WeatherTest extends Specification {
 
-    Weather weather
+    def weather
     def rssRetriever
-    def conditionsFile
-    def forecastFile
+
+    def mockForConditionsFile
+    def conditionsFileProxy
+
+    def mockForForecastFile
+    def forecastFileProxy
 
     def setup() {
         rssRetriever = Mock(RssRetriever)
-        conditionsFile = Mock(File)
-        forecastFile = Mock(File)
-        weather = new Weather(rssRetriever, conditionsFile, forecastFile)
+        mockForConditionsFile = new MockFor(File)
+        mockForForecastFile = new MockFor(File)
+
+        mockForConditionsFile.demand.withWriter {}
+        mockForForecastFile.demand.withWriter {}
+
+        conditionsFileProxy = mockForConditionsFile.proxyInstance("conditions")
+        forecastFileProxy = mockForForecastFile.proxyInstance("forecast")
+        weather = new Weather(rssRetriever, conditionsFileProxy, forecastFileProxy)
     }
 
     def "Current condition is what we retrieved"() {
-        weather.rssRetriever.currentConditions() >> "Mostly Sunny"
+        rssRetriever.currentConditions() >> "Mostly Sunny"
 
         expect:
         weather.currentConditions() == "Mostly Sunny"
@@ -61,13 +71,10 @@ class WeatherTest extends Specification {
 
     def "In aggregate mode, weather should produce files containing the current conditions and forecasts"() {
         when:
-        weather.conditions() >> "Conditions 123"
-        weather.forecast() >>  "Forecast 123"
-
         weather.writeAggregateFiles()
 
         then:
-        1 * conditionsFile.withWriter {it << "Conditions 123"}
-        1 * forecastFile.withWriter {it << "Forecast 123"}
+        mockForConditionsFile.verify conditionsFileProxy
+        mockForForecastFile.verify forecastFileProxy
     }
 }
