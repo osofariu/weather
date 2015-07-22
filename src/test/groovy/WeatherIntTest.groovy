@@ -1,5 +1,6 @@
 import spock.lang.Specification
 
+
 class WeatherIntTest  extends  Specification {
 
     def "weather gives you reasonable conditions"() {
