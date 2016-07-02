@@ -4,7 +4,7 @@ class RssRetriever {
 
     def xml
     def xmlSlurper
-    def tryCount = 10
+    def tryCount = 5
     def sleepDuration = 10000
 
     def process() {
@@ -21,7 +21,9 @@ class RssRetriever {
     }
 
     def GPathResult  getContent() {
-        GPathResult result = xmlSlurper.parse("http://weather.yahooapis.com/forecastrss?w=12776196")
+        //GPathResult result = xmlSlurper.parse("http://weather.yahooapis.com/forecastrss?w=12776196")
+        GPathResult result = xmlSlurper.parse(" https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20weather.forecast%20where%20woeid%3D2383660")
+
         if (result != null) {
             result.declareNamespace('yweather': 'http://xml.weather.yahoo.com/ns/rss/1.0', 'geo': 'http://www.w3.org/2003/01/geo/wgs84_pos#')
         }
@@ -33,23 +35,23 @@ class RssRetriever {
     }
 
     def title() {
-        xml.channel.title.text()
+        xml.results.channel.title.text()
     }
 
     def currentConditions() {
-        xml.channel.item.'yweather:condition'.@text.text()
+        xml.results.channel.item.'yweather:condition'.@text.text()
     }
 
     def currentTemperature() {
-        xml.channel.item.'yweather:condition'.@temp.text()
+        xml.results.channel.item.'yweather:condition'.@temp.text()
     }
 
     def currentIcon() {
-        xml.channel.item.'yweather:condition'.@code.text()
+        xml.results.channel.item.'yweather:condition'.@code.text()
     }
 
     def forecast() {
-        def ywforecast =  xml.channel.item.'yweather:forecast'
+        def ywforecast =  xml.results.channel.item.'yweather:forecast'
         def forecastList = [] as List
         ywforecast.list().each{
             def dayForecast = [day: it.@day, date: it.@date, low: it.@low, high: it.@high, forecast: it.@text, code: it.@code]

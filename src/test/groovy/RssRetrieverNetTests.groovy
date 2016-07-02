@@ -10,8 +10,8 @@ class RssRetrieverNetTests  extends  Specification {
         retriever.process()
 
         then:
-        retriever.name() == "rss"
-        retriever.title() == "Yahoo! Weather - Columbus, OH"
+        retriever.name() == "query"
+        retriever.title() == "Yahoo! Weather - Columbus, OH, US"
     }
 
     def "when network is unavailable max try count minus 1 it should still work"() {
@@ -22,8 +22,8 @@ class RssRetrieverNetTests  extends  Specification {
         retriever.process()
 
         then:
-        retriever.name() == "rss"
-        retriever.title() == "Yahoo! Weather - Columbus, OH"
+        retriever.name() == "query"
+        retriever.title() == "Yahoo! Weather - Columbus, OH, US"
     }
 
     def "when network is unavailable max try count we should get an exception"() {

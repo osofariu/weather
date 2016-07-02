@@ -12,99 +12,97 @@ class RssRetrieverTest extends  Specification {
                 'yweather': 'http://xml.weather.yahoo.com/ns/rss/1.0', 'geo': 'http://www.w3.org/2003/01/geo/wgs84_pos#')
     }
 
-    def "it gets content from Yahoo weather site when asked to get contents from URL with node rss"() {
+    def "it gets content from Yahoo weather site when asked to get contents from URL"() {
         expect:
-        retriever.name() == "rss"
-        retriever.title() == "Yahoo! Weather - Columbus, OH"
+        retriever.name() == "query"
+        retriever.title() == "Yahoo! Weather - Columbus, OH, US"
     }
 
-    def "current condition is Cloudy"() {
+    def "current condition is"() {
         expect:
-        retriever.currentConditions() == "Cloudy"
+        retriever.currentConditions() == "Partly Cloudy"
     }
 
-    def "current temperature is 45"() {
+    def "current temperature is"() {
         expect:
-        retriever.currentTemperature() == "45"
+        retriever.currentTemperature() == "63"
     }
 
-    def "current icon is 26"() {
+    def "current icon is"() {
 
         expect:
-        retriever.currentIcon() == "26"
+        retriever.currentIcon() == "30"
     }
 
-    def "current forecast has five entries in it "() {
+    def "current forecast has ten entries in it "() {
         def forecast = retriever.forecast();
 
         expect:
-        forecast.size == 5
+        forecast.size == 10
     }
 
-    def "today is Sat, 8 Nov 2014, low=33, high=51, forecast=Partly Cloudy, code=29"() {
+    def "today is"() {
         def forecast = retriever.forecast();
         def today = forecast[0]
 
         expect:
         today["day"]        == "Sat"
-        today["date"]       == "8 Nov 2014"
-        today["low"]        == "33"
-        today["high"]       == "51"
-        today["forecast"]   == "Partly Cloudy"
-        today["code"]       == "29"
+        today["date"]       == "02 Jul 2016"
+        today["low"]        == "57"
+        today["high"]       == "78"
+        today["forecast"]   == "Mostly Cloudy"
+        today["code"]       == "28"
     }
 
-    def "Sunday day=Sun, date=9 Nov 2014, low=37, high=52 forecast=Sunny, code=32 /> "() {
+    def "tomorrow is"() {
         def forecast = retriever.forecast();
         def today = forecast[1]
 
         expect:
         today["day"]        == "Sun"
-        today["date"]       == "9 Nov 2014"
-        today["low"]        == "37"
-        today["high"]       == "52"
-        today["forecast"]   == "Sunny"
-        today["code"]       == "32"
+        today["date"]       == "03 Jul 2016"
+        today["low"]        == "60"
+        today["high"]       == "77"
+        today["forecast"]   == "Cloudy"
+        today["code"]       == "26"
     }
 
-    def "Monday day=Mon, date=10 Nov 2014, low=44, high=62 forecast=Sunny, code=32 /> "() {
+    def "day after tomorrow is"() {
         def forecast = retriever.forecast();
         def today = forecast[2]
 
         expect:
         today["day"]        == "Mon"
-        today["date"]       == "10 Nov 2014"
-        today["low"]        == "44"
-        today["high"]       == "62"
-        today["forecast"]   == "Mostly Sunny"
-        today["code"]       == "34"
+        today["date"]       == "04 Jul 2016"
+        today["low"]        == "62"
+        today["high"]       == "75"
+        today["forecast"]   == "Showers"
+        today["code"]       == "11"
     }
 
-    def "Tuesday day=Tue, date=11 Nov 2014, low=36, high=63 forecast=PM Showers, code=39 /> "() {
+    def "day after after tomorrow is"() {
         def forecast = retriever.forecast();
         def today = forecast[3]
 
         expect:
         today["day"]        == "Tue"
-        today["date"]       == "11 Nov 2014"
-        today["low"]        == "36"
-        today["high"]       == "63"
-        today["forecast"]   == "PM Showers"
-        today["code"]       == "39"
+        today["date"]       == "05 Jul 2016"
+        today["low"]        == "66"
+        today["high"]       == "84"
+        today["forecast"]   == "Partly Cloudy"
+        today["code"]       == "30"
     }
 
-    def "Wednesday day=Wed, date=12 Nov 2014, low=28, high=42 forecast=Partly Cloudy, code=30 /> "() {
+    def "day after after after tomorrow is"() {
         def forecast = retriever.forecast();
         def today = forecast[4]
 
         expect:
         today["day"]        == "Wed"
-        today["date"]       == "12 Nov 2014"
-        today["low"]        == "28"
-        today["high"]       == "42"
-        today["forecast"]   == "Partly Cloudy"
-        today["code"]       == "30"
+        today["date"]       == "06 Jul 2016"
+        today["low"]        == "68"
+        today["high"]       == "86"
+        today["forecast"]   == "Thunderstorms"
+        today["code"]       == "4"
     }
-
-
 }

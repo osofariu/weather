@@ -8,7 +8,7 @@ class WeatherIntTest  extends  Specification {
         String conditions = weather.conditions()
 
         expect:
-        assert conditions =~ /.*°F/
+        assert conditions =~ /.*\d°F/
     }
 
 
@@ -23,7 +23,7 @@ class WeatherIntTest  extends  Specification {
         def conditionsText = getTextFromFile(new File(conditionsFileName))
         def forecastText = getTextFromFile(new File(forecastFileName))
         conditionsText.get(0).size() > 0
-        forecastText.size() == 5
+        forecastText.size() == 10
     }
 
     def "weather aggregate option saves weather info to files as requested"() {
